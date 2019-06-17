@@ -2,7 +2,7 @@
 export JVIDIA_PATH="/home/alishafahi/jvidia"
 function jqueue-free(){
 	gpus=$(nvidia-smi | tail -n +25 | head -n -1 | while read line ; do echo "${line}" | awk '{print $2}' ; done | uniq )
-	frees=$( for i in `seq 1 3` ; do if [[ ! $gpus == *"${i}"* ]] ; then echo "$i" ; fi ; done)
+	frees=$( for i in `seq 0 2` ; do if [[ ! $gpus == *"${i}"* ]] ; then echo "$i" ; fi ; done)
 	count=$( echo ${frees} | tr -d ' \n' | wc -c)
 	frees=$( echo ${frees} | sed 's/ /,/g')
 	echo $count $frees
