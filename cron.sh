@@ -3,5 +3,5 @@ export PATH="/home/alishafahi/bin:/home/alishafahi/.local/bin:/usr/local/cuda-8.
 export LD_LIBRARY_PATH="/usr/local/cuda-8.0/lib64:/usr/local/cudnn-6.0/lib64:" 
 source "/home/alishafahi/jvidia/lib.sh" 
 source "/home/alishafahi/.bashrc"
-echo "`date`"
+echo `date`
 jattempt

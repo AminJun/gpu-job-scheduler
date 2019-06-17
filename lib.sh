@@ -59,9 +59,9 @@ function jdeque(){
 	date=$(cat "${JVIDIA_PATH}/queue/${i}/info.txt"| head -n 2 | tail -n 1 | tr -d '\n')
 	user=$(cat "${JVIDIA_PATH}/queue/${i}/info.txt"| head -n 3 | tail -n 1 | tr -d '\n')
 	gpus=$(cat "${JVIDIA_PATH}/queue/${i}/info.txt"| head -n 4 | tail -n 1 | tr -d '\n')
-	source "${JVIDIA_PATH}/queue/${i}/run.sh" >> "${JVIDIA_PATH}/log.txt" &
-	pid=$!
-	rm -r "${JVIDIA_PATH}/queue/${i}"
+	source "${JVIDIA_PATH}/queue/${i}/run.sh" &
+	mkdir -p "${JVIDIA_PATH}/archive/${i}/"
+	mv "${JVIDIA_PATH}/queue/${i}" "${JVIDIA_PATH}/archive/${i}/`date`"
 }
 function jlunch(){
 	id=`jqstat-next-id`
