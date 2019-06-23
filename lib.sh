@@ -53,6 +53,9 @@ function jattempt(){
 		jdeque
 	fi
 }
+function juse-gpus(){
+	jattempt
+}
 function jdeque(){
 	i=$(jqueue-next-run | awk '{print $1}')
 	path=$(cat "${JVIDIA_PATH}/queue/${i}/info.txt"| head -n 1 | tail -n 1 | tr -d '\n')
@@ -62,6 +65,10 @@ function jdeque(){
 	source "${JVIDIA_PATH}/queue/${i}/run.sh" &
 	mkdir -p "${JVIDIA_PATH}/archive/${i}/"
 	mv "${JVIDIA_PATH}/queue/${i}" "${JVIDIA_PATH}/archive/${i}/`date`"
+	len=$(jqstat | wc -l)
+	if [ "${len}" == 1 ] ; then 
+		source "${JVIDIA_PATH}/text.sh"
+	fi
 }
 function jlunch(){
 	id=`jqstat-next-id`
@@ -147,4 +154,7 @@ function jnewrun(){
 	
 	echo "Created ${shname}" 
 	echo "Use: jlunch ${shname} to run"
+}
+function jqclear(){
+	jqstat | awk '{print $1}' | tail -n +2 | while read id ; do jqrem "${id}" ; done ;
 }
