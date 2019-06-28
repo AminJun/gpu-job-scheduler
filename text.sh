@@ -1,5 +1,5 @@
 message="Gholamali" 
-post=1
+post=0
 if [ "${post}" == "1" ] ; then 
 	curl -X POST https://textbelt.com/text \
 	       --data-urlencode phone='2025945672' \

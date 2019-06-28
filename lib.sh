@@ -2,7 +2,7 @@
 export JVIDIA_PATH="/home/alishafahi/jvidia"
 function jqueue-free(){
 	gpus=$(nvidia-smi | tail -n +25 | head -n -1 | while read line ; do echo "${line}" | awk '{print $2}' ; done | uniq )
-	frees=$( for i in `seq 0 2` ; do if [[ ! $gpus == *"${i}"* ]] ; then echo "$i" ; fi ; done)
+	frees=$( cat "${JVIDIA_PATH}/gpus" | while read -n 1 c ; do if [ "${c}" != "" ] ; then echo "${c}"; fi ; done | while read i ; do if [[ ! $gpus == *"${i}"* ]] ; then echo "$i" ; fi ; done)
 	count=$( echo ${frees} | tr -d ' \n' | wc -c)
 	frees=$( echo ${frees} | sed 's/ /,/g')
 	echo $count $frees
@@ -19,7 +19,9 @@ function jqstat(){
 	done;
 }
 function jqrem(){
+	if [ "${1}" != "" ] ; then 
 	rm -r "${JVIDIA_PATH}/queue/${1}"
+	fi
 }
 function jqstat-next-id(){
 	last=$(ls "${JVIDIA_PATH}/queue/" | sort -h | tail -n 1)
@@ -52,9 +54,6 @@ function jattempt(){
 		export CUDA_VISIBLE_DEVICES=${take}
 		jdeque
 	fi
-}
-function juse-gpus(){
-	jattempt
 }
 function jdeque(){
 	i=$(jqueue-next-run | awk '{print $1}')
@@ -157,4 +156,13 @@ function jnewrun(){
 }
 function jqclear(){
 	jqstat | awk '{print $1}' | tail -n +2 | while read id ; do jqrem "${id}" ; done ;
+}
+function jvtext-enable(){
+	sed -i "s/post=./post=1/g" "${JVIDIA_PATH}/text.sh"
+}
+function jvtext-disable(){
+	sed -i "s/post=./post=0/g" "${JVIDIA_PATH}/text.sh"
+}
+function jqueue-setgpus(){
+	echo "$1" > "${JVIDIA_PATH}/gpus"
 }
